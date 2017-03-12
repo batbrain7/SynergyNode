@@ -8,14 +8,14 @@ var connection = mysql.createConnection({
 });
 
 connection.connect(function(err) {
-	if(err) 
+	if(err)
 		console.log("Error Connecting database" + err.stack);
-	else 
+	else
 		console.log("Connected");
 });
 
 function registerAgent(res,agentid,password)  {
-	connection.query("insert into register values('" + agentid + "','" + password + "'');",function(err,result) {
+	connection.query("insert into register values('"+agentid+"','"+password+"'');",function(err,result) {
 		if(err){
 			console.log(err.stack);
 		} else {
@@ -26,8 +26,7 @@ function registerAgent(res,agentid,password)  {
 };
 
 function newAllotment(res,fileno,appname,primcont,seccontact,address,landmark,agentid,add_type) {
-	connection.query("insert into allotment values(" +fileno+",'"+appname+"','"+primcont+"','"+seccontact+"',
-		'"+address+"','"+landmark+"','"+agentid+"','"+add_type+"');",function(err,result) {
+	connection.query("insert into allotment values (" +fileno+",'"+appname+"',"+primcont+","+seccontact+",'"+address+"','"+landmark+"','"+agentid+"','"+add_type+"');",function(err,result) {
 		if(err) {
 			console.log(err.stack);
 		} else {
@@ -37,8 +36,52 @@ function newAllotment(res,fileno,appname,primcont,seccontact,address,landmark,ag
 };
 
 function updateagent(res,fileno,appname,primcont,seccontact,address,landmark,agentid,add_type){
-	connection.query("update allotment set values(" +fileno+",'"+appname+"','"+primcont+"','"+seccontact+"',
-		'"+address+"','"+landmark+"','"+agentid+"','"+add_type+"') where fileno = "+fileno+";",function(err,result) {
+	connection.query("update allotment set values(" +fileno+",'"+appname+"',"+primcont+","+seccontact+",'"+address+"','"+landmark+"','"+agentid+"','"+add_type+"') where fileno = "+fileno+";",function(err,result) {
+		if(err) {
+			console.log(err.stack);
+		} else {
+			console.log(result);
+		}
+	});
+};
+
+function selectAll(res,fileno) {
+	console.log(fileno);
+	connection.query("select* from allotment where fileno = "+fileno+";",function(err,result) {
+		if(err) {
+			console.log(err.stack);
+		} else {
+			res.send(result);
+			console.log(result);
+		}
+	});
+};
+
+function insertresid(res,fileno,personcontacted,resstatus,marrystatus,nofamembers,nochildren,spouseemp,locality
+,vehicle,vregno,carparea,polinfluence,otherrem,location) {
+	connection.query("insert into resodential values(" +fileno+",'"+personcontacted+"','"+resstatus+"','"+marrystatus+"',"+nofamembers+","+nochildren+",'"+spouseemp+"','"+locality+"','"+vehicle+"','"+vregno+"','"+carparea+"','"+polinfluence+"','"+otherrem+"','"+location+"');",function(err,result) {
+		if(err) {
+			console.log(err.stack);
+		} else {
+			console.log(result);
+		}
+	});
+};
+
+function insertoffice(res,fileno,desigperson,mobile,doj,desigappl,yearssincejob,natbusiness,jobtype
+,startinorg,jobtransfer,otherrem,location) {
+	connection.query("insert into residential values(" +fileno+",'"+desigperson+"',"+mobile+",'"+doj+"','"+desigappl+"','"+yearssincejob+"','"+natbusiness+"','"+jobtype+"','"+startinorg+"','"+jobtransfer+",'"+otherrem+"','"+location+"');",function(err,result) {
+		if(err) {
+			console.log(err.stack);
+		} else {
+			console.log(result);
+		}
+	});
+};
+
+function insertbusiness(res,fileno,personcontacted,desig,contnum,offnum,natbusiness,nosinceform,comptype
+,noemployees,location) {
+	connection.query("insert into bsuiness values(" +fileno+",'"+personcontacted+"','"+desig+"',"+contnum+","+offnum+",'"+natbusiness+"',"+nosinceform+",'"+comptype+"',"+noemployees+",'"+location+"');",function(err,result) {
 		if(err) {
 			console.log(err.stack);
 		} else {
@@ -50,12 +93,7 @@ function updateagent(res,fileno,appname,primcont,seccontact,address,landmark,age
 module.exports.register = registerAgent;
 module.exports.allotment = newAllotment;
 module.exports.updatent = updateagent;
-
-
-
-
-
-
-
-
-
+module.exports.select = selectAll;
+module.exports.office = insertoffice;
+module.exports.business = insertbusiness;
+module.exports.residential = insertresid;

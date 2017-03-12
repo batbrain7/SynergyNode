@@ -6,7 +6,7 @@ var bodyparser = require('body-parser');
 app.use(bodyparser.urlencoded({
 	extended: false
 }));
-var router= exoress.Router();
+var router= express.Router();
 
 var connection = mysql.createConnection({
 	host:'localhost',
@@ -15,12 +15,14 @@ var connection = mysql.createConnection({
 	database:'SYNERGYGO'
 });
 
-connection.connect(function(err)) {
+connection.connect(function(err) {
 	if(err)
 		console.log("Error Connecting to the Database");
 	else
 		console.log("Connected");
 });
+
+routes.configure(app);
 
 var server = app.listen(3000,function() {
 	console.log('Server listening on port :' + server.address().port);
