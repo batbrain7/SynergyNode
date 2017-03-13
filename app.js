@@ -2,6 +2,7 @@ var express = require('express');
 var routes = require('./routes');
 var app = express();
 var mysql = require('mysql');
+var advroutes = require('./advroutes');
 var bodyparser = require('body-parser');
 app.use(bodyparser.urlencoded({
 	extended: false
@@ -23,6 +24,7 @@ connection.connect(function(err) {
 });
 
 routes.configure(app);
+advroutes.upload(app);
 
 var server = app.listen(3000,function() {
 	console.log('Server listening on port :' + server.address().port);
